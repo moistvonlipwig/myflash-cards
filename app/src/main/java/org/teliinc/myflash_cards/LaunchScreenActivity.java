@@ -5,6 +5,8 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import com.firebase.client.Firebase;
+
 public class LaunchScreenActivity extends AppCompatActivity {
 
     // Splash screen timer
@@ -14,6 +16,9 @@ public class LaunchScreenActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_screen);
+
+        // Setup Firebase
+        Firebase.setAndroidContext(this);
 
         new Handler().postDelayed(new Runnable() {
 

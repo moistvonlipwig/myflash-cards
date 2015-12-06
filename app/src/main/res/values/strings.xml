@@ -14,6 +14,8 @@
     <string name="settings">Settings</string>
     <string name="flash_title">GMS Flash Cards</string>
     <string name="flash_subtitle">Learning by recalling</string>
+    <string name="enter_questions">Enter the Question</string>
+    <string name="enter_answer">Answer</string>
 
     <string-array name="pref_syncConnectionTypes_entries">
         <item>Local</item>
