@@ -55,6 +55,7 @@
         android:foreground="?android:attr/selectableItemBackground"
         android:focusable="true"
         android:clickable="true"
+        android:onClick="browseCards"
         >
         <LinearLayout
             android:layout_width="fill_parent"

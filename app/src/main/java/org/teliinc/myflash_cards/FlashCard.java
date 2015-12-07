@@ -9,6 +9,7 @@ public class FlashCard {
 
     private String Question;
     private String Answer;
+    public static List<FlashCard> RetreivedFlashCards;
 
     public FlashCard(String ans, String ques)
     {

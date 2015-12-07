@@ -64,4 +64,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this, CreateCardActivity.class);
         startActivity(intent);
     }
+
+    public void browseCards(View view) {
+        Intent intent = new Intent(this, BrowseCards.class);
+        startActivity(intent);
+    }
 }

@@ -68,6 +68,9 @@ public class CreateCardActivityAnswer extends AppCompatActivity {
         Answer = editTextAnswer.getText().toString();
         FlashCard flashCard = new FlashCard(Answer, Question);
 
+        // Update local structure the maintains the view
+        FlashCard.RetreivedFlashCards.add(flashCard);
+
         // Store the data to server
         // Using a CountDownLatch to prevent moving on without saving
         final CountDownLatch done = new CountDownLatch(2);
