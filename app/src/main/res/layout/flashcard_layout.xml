@@ -20,19 +20,20 @@
             >
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/person_photo"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:id="@+id/question_icon"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="16dp"
+                android:src="@drawable/question"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textViewQuestion"
-                android:layout_toRightOf="@+id/person_photo"
+                android:layout_toRightOf="@+id/question_icon"
                 android:layout_alignParentTop="true"
                 android:textSize="30sp"
                 />

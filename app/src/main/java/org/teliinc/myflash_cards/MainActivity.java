@@ -17,10 +17,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO : For final project
         // Enable Action Bar
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.show();
+
     }
 
     /**
@@ -41,6 +41,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
+
+        // Build Dynamic Menu
+        // Add either a "photo" or "finish" button to the action bar, depending on which page
+        // is currently selected.
+        // TODO : Build dynamic menu
+        /*MenuItem item = menu.add(Menu.NONE, R.id.action_flip, Menu.NONE,
+                mShowingBack
+                        ? R.string.action_photo
+                        : R.string.action_info);
+        item.setIcon(mShowingBack
+                ? R.drawable.ic_action_photo
+                : R.drawable.ic_action_info);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);*/
+
         getMenuInflater().inflate(R.menu.application_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
@@ -53,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
                 showSettings();
                 return true;
             case R.id.action_sections:
-                // TODO : Display Sections
+                // TODO : Toolbar Display Sections
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

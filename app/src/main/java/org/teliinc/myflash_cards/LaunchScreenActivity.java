@@ -25,6 +25,12 @@ public class LaunchScreenActivity extends AppCompatActivity {
     // Flashcard Reference
     Firebase flashcardRef;
 
+    // Tags Reference
+    Firebase tagsRef;
+
+    // Progress Marker
+    int marker = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
         progress.setProgress(0);
+        progress.setMax(100);
         progress.show();
 
         // Download in AsyncTask
@@ -59,10 +66,15 @@ public class LaunchScreenActivity extends AppCompatActivity {
 
             // Get Flashcard Ref
             flashcardRef = new Firebase("https://teliflashcards.firebaseio.com/FlashCards/");
+            marker=40;
+            progress.setProgress(marker);
 
+            tagsRef = new Firebase("https://teliflashcards.firebaseio.com/Tags/");
             // Initialize FlashCard List
             // List will be populated from database
             FlashCard.RetreivedFlashCards = new ArrayList<>();
+            marker=80;
+            progress.setProgress(marker);
 
             // Read the data and store in FlashCards
             flashcardRef.addValueEventListener(new ValueEventListener() {
@@ -70,13 +82,11 @@ public class LaunchScreenActivity extends AppCompatActivity {
                 public void onDataChange(DataSnapshot snapshot) {
                     // Iterate through the list and store in list
                     int count = 0;
-                    progress.setMax((int) snapshot.getChildrenCount());
+                    progress.setMax(100 + (int) snapshot.getChildrenCount());
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         publishProgress(count++);
                         Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
                         FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
-
-                        // TODO : Get Tags and update RetreivedFlashCards
                         FlashCard.RetreivedFlashCards.add(f);
                     }
                 }
@@ -103,7 +113,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
 
         @Override
         protected void onProgressUpdate(Integer... values) {
-            progress.setProgress(1);
+            progress.setProgress(marker++);
             Log.i("ProgressUpdate", "Updating" + values[0]);
         }
     }

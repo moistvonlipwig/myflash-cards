@@ -24,6 +24,8 @@
         <activity android:name=".CreateCardActivityAnswer" />
         <activity android:name=".BrowseCards" >
         </activity>
+        <activity android:name=".DisplayCardActivity" >
+        </activity>
     </application>
 
 </manifest>

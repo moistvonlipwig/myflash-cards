@@ -1,6 +1,7 @@
 package org.teliinc.myflash_cards;
 
 
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,10 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardAdapter.FlashcardViewHolder>{
+
+    public int current_card=0;
 
     public static class FlashcardViewHolder extends RecyclerView.ViewHolder {
         CardView cv;
@@ -46,6 +48,16 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardAdapter.Flas
     @Override
     public void onBindViewHolder(FlashcardViewHolder flashcardViewHolder, int i) {
         flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getQuestion());
+        current_card = i;
+        flashcardViewHolder.cv.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(v.getContext(), DisplayCardActivity.class);
+                intent.putExtra("QUESTION",Flashcards.get(current_card).getQuestion());
+                intent.putExtra("ANSWER",Flashcards.get(current_card).getAnswer());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     @Override
