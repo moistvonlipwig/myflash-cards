@@ -7,6 +7,10 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
+import android.view.View;
+
+import com.firebase.client.Firebase;
+
 
 public class BrowseCards extends AppCompatActivity {
 
@@ -32,7 +36,16 @@ public class BrowseCards extends AppCompatActivity {
         BrowseCardsView.setLayoutManager(mLayoutManager);
         BrowseCardsView.setItemAnimator(new DefaultItemAnimator());
 
-        // Initialize the
+        // Add a OnItemTouchListener
+        BrowseCardsView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        // TODO Handle item click
+                    }
+                })
+        );
+
         mAdapter = new FlashcardAdapter(FlashCard.RetreivedFlashCards);
         BrowseCardsView.setAdapter(mAdapter);
     }

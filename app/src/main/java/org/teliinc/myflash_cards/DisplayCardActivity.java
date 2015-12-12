@@ -10,19 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.greenfrvr.hashtagview.HashtagView;
+import me.gujun.android.taggroup.TagGroup;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import me.gujun.android.taggroup.TagGroup;
 
 public class DisplayCardActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
 
     private Handler mHandler = new Handler();
     private boolean mShowingBack = false;
 
-    TextView TextViewQuestion;
-    TextView TextViewAnswer;
-    Bundle extras;
+    public static final List<String> TAGS = Arrays.asList("cupcake", "donut", "eclair", "froyo",
+            "gingerbread", "honeycomb", "icecreamsandwich", "jellybean", "kitkat", "lollipop", "marshmallow");
+
+    public Bundle extras;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -110,7 +113,7 @@ public class DisplayCardActivity extends AppCompatActivity implements FragmentMa
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View fragmentView = inflater.inflate(R.layout.fragment_card_front, container, false);
-            TextViewQuestion = (TextView) fragmentView.findViewById(R.id.textCardQuestion);
+            TextView TextViewQuestion = (TextView) fragmentView.findViewById(R.id.textCardQuestion);
             TextViewQuestion.setText(extras.getString("QUESTION"));
             return fragmentView;
         }
@@ -124,15 +127,11 @@ public class DisplayCardActivity extends AppCompatActivity implements FragmentMa
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View fragmentView = inflater.inflate(R.layout.fragment_card_back, container, false);
-            TextViewAnswer = (TextView) fragmentView.findViewById(R.id.textCardAnswer);
+            TextView TextViewAnswer = (TextView) fragmentView.findViewById(R.id.textCardAnswer);
             TextViewAnswer.setText(extras.getString("ANSWER"));
 
-            HashtagView hashTag = (HashtagView)fragmentView.findViewById(R.id.hashtagsCard);
-            List<String> list = new ArrayList<String>();
-            list.add("Android");
-            list.add("UI");
-            list.add("Testing");
-            hashTag.setData(list);
+            TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCard);
+            hashTag.setTags(TAGS);
 
             return fragmentView;
         }

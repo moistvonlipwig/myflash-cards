@@ -28,6 +28,9 @@ public class LaunchScreenActivity extends AppCompatActivity {
     // Tags Reference
     Firebase tagsRef;
 
+    // Listener for firebase update
+    ValueEventListener listener;
+
     // Progress Marker
     int marker = 0;
 
@@ -50,7 +53,9 @@ public class LaunchScreenActivity extends AppCompatActivity {
         progress.show();
 
         // Download in AsyncTask
-        new AsyncDataLoad().execute(0);
+        // new AsyncDataLoad().execute(0);
+        // To run in parallel
+        new AsyncDataLoad().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
     class AsyncDataLoad extends AsyncTask<Integer, Integer, String> {
@@ -77,11 +82,13 @@ public class LaunchScreenActivity extends AppCompatActivity {
             progress.setProgress(marker);
 
             // Read the data and store in FlashCards
-            flashcardRef.addValueEventListener(new ValueEventListener() {
+            listener = new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     // Iterate through the list and store in list
                     int count = 0;
+                    // This function is called everytime something changes so I have to reset the data
+                    FlashCard.RetreivedFlashCards.clear();
                     progress.setMax(100 + (int) snapshot.getChildrenCount());
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         publishProgress(count++);
@@ -96,7 +103,9 @@ public class LaunchScreenActivity extends AppCompatActivity {
                     System.out.println("The read failed: " + firebaseError.getMessage());
                 }
 
-            });
+            };
+            flashcardRef.addValueEventListener(listener);
+
             return "Tast Completed";
         }
 

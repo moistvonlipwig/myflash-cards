@@ -11,6 +11,7 @@ import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
+    // TODO : Settings
     public SettingsFragment() {
         // Required empty public constructor
     }
