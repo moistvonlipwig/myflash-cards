@@ -15,6 +15,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class LaunchScreenActivity extends AppCompatActivity {
@@ -23,13 +25,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
     private ProgressDialog progress;
 
     // Flashcard Reference
-    Firebase flashcardRef;
-
-    // Tags Reference
-    Firebase tagsRef;
-
-    // Listener for firebase update
-    ValueEventListener listener;
+    Firebase firebaseRef;
 
     // Progress Marker
     int marker = 0;
@@ -51,7 +47,11 @@ public class LaunchScreenActivity extends AppCompatActivity {
         progress.setProgress(0);
         progress.setMax(100);
         progress.show();
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
         // Download in AsyncTask
         // new AsyncDataLoad().execute(0);
         // To run in parallel
@@ -70,30 +70,33 @@ public class LaunchScreenActivity extends AppCompatActivity {
         protected String doInBackground(Integer... Params) {
 
             // Get Flashcard Ref
-            flashcardRef = new Firebase("https://teliflashcards.firebaseio.com/FlashCards/");
+            firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/");
             marker=40;
             progress.setProgress(marker);
 
-            tagsRef = new Firebase("https://teliflashcards.firebaseio.com/Tags/");
-            // Initialize FlashCard List
-            // List will be populated from database
             FlashCard.RetreivedFlashCards = new ArrayList<>();
             marker=80;
             progress.setProgress(marker);
 
-            // Read the data and store in FlashCards
-            listener = new ValueEventListener() {
+            // Read the flashcard data and store in FlashCards
+            firebaseRef.child("FlashCards").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot snapshot) {
                     // Iterate through the list and store in list
                     int count = 0;
                     // This function is called everytime something changes so I have to reset the data
+                    // TODO : Progress bar does not feel right
                     FlashCard.RetreivedFlashCards.clear();
                     progress.setMax(100 + (int) snapshot.getChildrenCount());
                     for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                         publishProgress(count++);
                         Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
                         FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
+
+                        // Read the tags and update the flashcard
+                        Map<String, String> tags = (Map<String, String>) postSnapshot.child("Tags").getValue();
+                        f.setTags(tags.keySet());
+                        
                         FlashCard.RetreivedFlashCards.add(f);
                     }
                 }
@@ -103,8 +106,34 @@ public class LaunchScreenActivity extends AppCompatActivity {
                     System.out.println("The read failed: " + firebaseError.getMessage());
                 }
 
-            };
-            flashcardRef.addValueEventListener(listener);
+            });
+
+//            // Read Tag data and store
+//            // Read the data and store in FlashCards
+//            firebaseRef.child("Tags").addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot snapshot) {
+//                    // Iterate through the list and store in list
+//                    int count = 0;
+//                    // This function is called everytime something changes so I have to reset the data
+//                    // TODO : Progress bar does not feel right
+//                    FlashCard.RetreivedFlashCards.clear();
+//                    progress.setMax(100 + (int) snapshot.getChildrenCount());
+//                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+//                        publishProgress(count++);
+//                        Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
+//                        FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
+//                        FlashCard.RetreivedFlashCards.add(f);
+//                    }
+//                }
+//
+//                @Override
+//                public void onCancelled(FirebaseError firebaseError) {
+//                    System.out.println("The read failed: " + firebaseError.getMessage());
+//                }
+//
+//            });
+
 
             return "Tast Completed";
         }

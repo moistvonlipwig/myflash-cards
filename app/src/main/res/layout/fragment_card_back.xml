@@ -24,7 +24,7 @@
         android:textStyle="bold" />
 
     <me.gujun.android.taggroup.TagGroup
-        android:id="@+id/tagsCard"
+        android:id="@+id/tagsCardBack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="40dp"></me.gujun.android.taggroup.TagGroup>

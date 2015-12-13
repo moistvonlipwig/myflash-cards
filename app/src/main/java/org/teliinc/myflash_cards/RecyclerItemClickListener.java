@@ -10,6 +10,9 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;
 
@@ -37,6 +40,9 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
                 Intent intent = new Intent(view.getContext(), DisplayCardActivity.class);
                 intent.putExtra("QUESTION", FlashCard.RetreivedFlashCards.get(position).getQuestion());
                 intent.putExtra("ANSWER", FlashCard.RetreivedFlashCards.get(position).getAnswer());
+                ArrayList<String> tagsList = new ArrayList<>();
+                tagsList.addAll(FlashCard.RetreivedFlashCards.get(position).getTags());
+                intent.putStringArrayListExtra("TAGS", tagsList);
                 view.getContext().startActivity(intent);
         }
         return false;

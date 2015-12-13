@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import me.gujun.android.taggroup.TagGroup;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -21,10 +23,6 @@ public class DisplayCardActivity extends AppCompatActivity implements FragmentMa
 
     private Handler mHandler = new Handler();
     private boolean mShowingBack = false;
-
-    public static final List<String> TAGS = Arrays.asList("cupcake", "donut", "eclair", "froyo",
-            "gingerbread", "honeycomb", "icecreamsandwich", "jellybean", "kitkat", "lollipop", "marshmallow");
-
     public Bundle extras;
 
     @Override
@@ -115,6 +113,12 @@ public class DisplayCardActivity extends AppCompatActivity implements FragmentMa
             View fragmentView = inflater.inflate(R.layout.fragment_card_front, container, false);
             TextView TextViewQuestion = (TextView) fragmentView.findViewById(R.id.textCardQuestion);
             TextViewQuestion.setText(extras.getString("QUESTION"));
+
+            TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCardFront);
+            ArrayList<String> TAGS = extras.getStringArrayList("TAGS");
+            hashTag.setTags(TAGS);
+            hashTag.setOnTagClickListener(mTagClickListener);
+
             return fragmentView;
         }
     }
@@ -130,10 +134,19 @@ public class DisplayCardActivity extends AppCompatActivity implements FragmentMa
             TextView TextViewAnswer = (TextView) fragmentView.findViewById(R.id.textCardAnswer);
             TextViewAnswer.setText(extras.getString("ANSWER"));
 
-            TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCard);
+            TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCardBack);
+            ArrayList<String> TAGS = extras.getStringArrayList("TAGS");
             hashTag.setTags(TAGS);
+            hashTag.setOnTagClickListener(mTagClickListener);
 
             return fragmentView;
         }
     }
+
+    private TagGroup.OnTagClickListener mTagClickListener = new TagGroup.OnTagClickListener() {
+        @Override
+        public void onTagClick(String tag) {
+            Toast.makeText(getBaseContext(), tag, Toast.LENGTH_SHORT).show();
+        }
+    };
 }

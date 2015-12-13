@@ -2,31 +2,40 @@
     <string name="app_name">My Flash Cards</string>
     <string name="settings_button">Settings</string>
 
-    <!-- Settings Preferences -->
-    <string name="pref_sync">pref_sync</string>
-    <string name="pref_syncConnectionTypes_default">1</string>
-
-    <string name="pref_enable_communication">pref_enable_communication</string>
-    <string name="pref_enable_communication_default">1</string>
 
     <!-- Settings Tab -->
     <string name="sections">Sections</string>
     <string name="settings">Settings</string>
+
     <string name="flash_title">My Flash Cards</string>
     <string name="flash_subtitle">Learning by recalling</string>
     <string name="enter_questions">Enter the Question</string>
     <string name="enter_answer">Answer</string>
 
-    <string-array name="pref_syncConnectionTypes_entries">
-        <item>Local</item>
-        <item>Remote</item>
+    <string-array name="pref_flashcardTypes_entries">
+        <item>Question</item>
+        <item>Answer</item>
     </string-array>
 
-    <string-array name="pref_syncConnectionTypes_values">
+    <string-array name="pref_flashcardTypes_values">
         <item>0</item>
         <item>1</item>
     </string-array>
 
+    <string-array name="pref_browseTypes_entries">
+        <item>Question</item>
+        <item>Answer</item>
+    </string-array>
+
+    <string-array name="pref_browseTypes_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
+    <string name="pref_browseTypes_default">1</string>
+    <string name="pref_flasehcardTypes_default">1</string>
+
+    <!-- Flashcard Titles -->
     <string name="card_question">Question</string>
     <string name="card_answer">Answer</string>
 </resources>
