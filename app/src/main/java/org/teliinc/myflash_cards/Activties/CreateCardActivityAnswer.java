@@ -1,35 +1,34 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import org.teliinc.myflash_cards.Activties.BaseMenuClass;
+import org.teliinc.myflash_cards.Activties.MainActivity;
+import org.teliinc.myflash_cards.Model.FlashCard;
+import org.teliinc.myflash_cards.R;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.CountDownLatch;
-import java.util.Iterator;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class CreateCardActivityAnswer extends AppCompatActivity {
+public class CreateCardActivityAnswer extends BaseMenuClass {
 
     @Bind(R.id.button_create_answer)
     Button button_create;

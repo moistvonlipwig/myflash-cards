@@ -4,9 +4,15 @@
     <!-- Settings Menu  -->
     <!-- Menu Item to display Flash Card Sections -->
     <item
-        android:id="@+id/action_sections"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/sections"
+        android:id="@+id/action_home"
+        android:icon="@drawable/ic_home"
+        android:title="Home"
+        app:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/action_browse"
+        android:icon="@drawable/ic_browse"
+        android:title="Browse"
         app:showAsAction="ifRoom"/>
 
     <!-- Settings, should always be in the overflow -->

@@ -1,9 +1,8 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,15 +10,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.teliinc.myflash_cards.R;
+
 import me.gujun.android.taggroup.TagGroup;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import me.gujun.android.taggroup.TagGroup;
-
-public class DisplayCardActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener {
+public class DisplayCardActivity extends BaseMenuClass implements FragmentManager.OnBackStackChangedListener {
 
     private Handler mHandler = new Handler();
     private boolean mShowingBack = false;

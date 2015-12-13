@@ -1,10 +1,12 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.RecyclierViewHelpers;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import org.teliinc.myflash_cards.R;
 
 /**
  * Created by cteli on 12/11/2015.

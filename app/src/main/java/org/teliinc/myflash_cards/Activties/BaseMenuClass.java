@@ -1,36 +1,17 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
 import android.content.Intent;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import java.util.List;
+import org.teliinc.myflash_cards.R;
 
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // Enable Action Bar
-        ActionBar supportActionBar = getSupportActionBar();
-        supportActionBar.show();
-
-    }
-
-    /**
-     *
-     * @param view
-     */
-    public void openSettings(View view)
-    {
-        showSettings();
-    }
+/**
+ * Created by cteli on 12/13/2015.
+ */
+public class BaseMenuClass extends AppCompatActivity {
 
     public void showSettings()
     {
@@ -66,21 +47,25 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 showSettings();
                 return true;
-            case R.id.action_sections:
-                // TODO : Toolbar Display Sections
+            case R.id.action_browse:
+                showBrowsePage();
+                return true;
+            case R.id.action_home:
+                showHomePage();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
-    public void createCards(View view) {
-        Intent intent = new Intent(this, CreateCardActivity.class);
+    private void showHomePage() {
+        Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }
 
-    public void browseCards(View view) {
+    private void showBrowsePage() {
         Intent intent = new Intent(this, BrowseCards.class);
         startActivity(intent);
     }
+
 }

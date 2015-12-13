@@ -1,4 +1,4 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -6,17 +6,16 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.ProgressBar;
-import android.view.View;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import org.teliinc.myflash_cards.Model.FlashCard;
+import org.teliinc.myflash_cards.R;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class LaunchScreenActivity extends AppCompatActivity {
@@ -96,7 +95,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
                         // Read the tags and update the flashcard
                         Map<String, String> tags = (Map<String, String>) postSnapshot.child("Tags").getValue();
                         f.setTags(tags.keySet());
-                        
+
                         FlashCard.RetreivedFlashCards.add(f);
                     }
                 }

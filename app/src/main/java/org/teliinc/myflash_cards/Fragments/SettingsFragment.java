@@ -1,4 +1,4 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Fragments;
 
 /**
  * Created by cteli on 11/14/2015.
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+
+import org.teliinc.myflash_cards.R;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 

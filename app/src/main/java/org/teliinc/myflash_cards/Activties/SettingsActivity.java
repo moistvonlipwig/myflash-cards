@@ -1,9 +1,11 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
-public class SettingsActivity extends AppCompatActivity {
+import org.teliinc.myflash_cards.R;
+import org.teliinc.myflash_cards.Fragments.SettingsFragment;
+
+public class SettingsActivity extends BaseMenuClass {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

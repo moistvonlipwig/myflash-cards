@@ -1,4 +1,4 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.RecyclierViewHelpers;
 
 /**
  * Created by cteli on 12/12/2015.
@@ -10,8 +10,10 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 
+import org.teliinc.myflash_cards.Activties.DisplayCardActivity;
+import org.teliinc.myflash_cards.Model.FlashCard;
+
 import java.util.ArrayList;
-import java.util.List;
 
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;

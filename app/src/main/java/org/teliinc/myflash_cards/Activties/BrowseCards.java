@@ -1,18 +1,19 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Activties;
 
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.firebase.client.Firebase;
+import org.teliinc.myflash_cards.RecyclierViewHelpers.FlashcardAdapter;
+import org.teliinc.myflash_cards.Model.FlashCard;
+import org.teliinc.myflash_cards.R;
+import org.teliinc.myflash_cards.RecyclierViewHelpers.RecyclerItemClickListener;
 
 
-public class BrowseCards extends AppCompatActivity {
+public class BrowseCards extends BaseMenuClass {
 
     RecyclerView BrowseCardsView;
     private RecyclerView.Adapter mAdapter;
@@ -49,20 +50,4 @@ public class BrowseCards extends AppCompatActivity {
         mAdapter = new FlashcardAdapter(FlashCard.RetreivedFlashCards);
         BrowseCardsView.setAdapter(mAdapter);
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle presses on the action bar items
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                // TODO : Toolbar show settings
-                return true;
-            case R.id.action_sections:
-                // TODO : Toolbar Goto Main
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
 }

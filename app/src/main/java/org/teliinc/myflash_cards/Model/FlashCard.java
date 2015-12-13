@@ -1,4 +1,4 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.Model;
 
 import java.util.HashSet;
 import java.util.List;

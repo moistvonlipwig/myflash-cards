@@ -1,11 +1,13 @@
-package org.teliinc.myflash_cards;
+package org.teliinc.myflash_cards.RecyclierViewHelpers;
 
 
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import org.teliinc.myflash_cards.Model.FlashCard;
+import org.teliinc.myflash_cards.R;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardViewHolder> 
 
     List<FlashCard> Flashcards;
 
-    FlashcardAdapter(List<FlashCard> Flashcards) {
+    public FlashcardAdapter(List<FlashCard> Flashcards) {
         this.Flashcards = Flashcards;
     }
 
