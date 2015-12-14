@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import org.teliinc.myflash_cards.Model.FlashCardTag;
 import org.teliinc.myflash_cards.RecyclierViewHelpers.FlashcardAdapter;
 import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.R;
@@ -28,7 +29,7 @@ public class BrowseCards extends BaseMenuClass {
         ActionBar supportActionBar = getSupportActionBar();
         supportActionBar.show();
 
-        BrowseCardsView = (RecyclerView)findViewById(R.id.flash_Card_view);
+        BrowseCardsView = (RecyclerView) findViewById(R.id.flash_Card_view);
 
         BrowseCardsView.setHasFixedSize(true);
 
@@ -42,12 +43,18 @@ public class BrowseCards extends BaseMenuClass {
                 new RecyclerItemClickListener(this, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
                     public void onItemClick(View view, int position) {
-                        // TODO Handle item click
                     }
                 })
         );
 
-        mAdapter = new FlashcardAdapter(FlashCard.RetreivedFlashCards);
+        // Check if intent is passed some data based on it being a tag based set
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            String tag = extras.getString("TAG");
+            mAdapter = new FlashcardAdapter(FlashCardTag.getFlashCardSet(tag));
+        } else {
+            mAdapter = new FlashcardAdapter(FlashCard.RetreivedFlashCards);
+        }
         BrowseCardsView.setAdapter(mAdapter);
     }
 }

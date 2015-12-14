@@ -13,9 +13,11 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
 import org.teliinc.myflash_cards.Model.FlashCard;
+import org.teliinc.myflash_cards.Model.FlashCardTag;
 import org.teliinc.myflash_cards.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class LaunchScreenActivity extends AppCompatActivity {
@@ -74,6 +76,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
             progress.setProgress(marker);
 
             FlashCard.RetreivedFlashCards = new ArrayList<>();
+            FlashCardTag.tagQuestions = new HashMap<String, FlashCardTag>();
             marker=80;
             progress.setProgress(marker);
 
@@ -97,6 +100,11 @@ public class LaunchScreenActivity extends AppCompatActivity {
                         f.setTags(tags.keySet());
 
                         FlashCard.RetreivedFlashCards.add(f);
+
+                        // Iterate through the tags and setup the Tag Hashset
+                        for(String tag : tags.keySet()) {
+                            FlashCardTag.updateFlashcard(tag,f);
+                        }
                     }
                 }
 

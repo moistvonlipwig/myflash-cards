@@ -2,6 +2,7 @@ package org.teliinc.myflash_cards.Activties;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.R;
 
 import me.gujun.android.taggroup.TagGroup;
@@ -56,7 +58,7 @@ public class DisplayCardActivity extends BaseMenuClass implements FragmentManage
         }
 
         // Flip to the back.
-
+        // TODO : Fix issue with animation.  Only one cycle of clicks works.
         mShowingBack = true;
 
         // Create and commit a new fragment transaction that adds the fragment for the back of
@@ -143,7 +145,9 @@ public class DisplayCardActivity extends BaseMenuClass implements FragmentManage
     private TagGroup.OnTagClickListener mTagClickListener = new TagGroup.OnTagClickListener() {
         @Override
         public void onTagClick(String tag) {
-            Toast.makeText(getBaseContext(), tag, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(getBaseContext(), BrowseCards.class);
+            intent.putExtra("TAG", tag);
+            startActivity(intent);
         }
     };
 }

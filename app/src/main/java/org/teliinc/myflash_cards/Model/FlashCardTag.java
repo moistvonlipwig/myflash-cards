@@ -1,5 +1,10 @@
 package org.teliinc.myflash_cards.Model;
 
+import com.firebase.client.Firebase;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -7,22 +12,22 @@ import java.util.Set;
  * Created by cteli on 12/13/2015.
  */
 public class FlashCardTag {
-    private Set<String> Questions;
     private String tag;
-    public static Map<String,FlashCardTag> RetreivedTags;
+    public List<FlashCard> RetreivedQuestions;
+    public static Map<String,FlashCardTag> tagQuestions;
 
-    public FlashCardTag(String tag, Set<String> questions)
+    public FlashCardTag(String tag)
     {
         this.tag = tag;
-        this.setQuestions(questions);
+        RetreivedQuestions = new ArrayList<>();
     }
 
-    public Set<String> getQuestions()
-    {   return Questions;
+    public List<FlashCard> getQuestions()
+    {   return RetreivedQuestions;
     }
 
-    public void setQuestions(Set<String> questions) {
-        this.Questions = questions;
+    public void setQuestions(List<FlashCard> questions) {
+        this.RetreivedQuestions = questions;
     }
 
     public String getTag() {
@@ -31,5 +36,22 @@ public class FlashCardTag {
 
     public void setTag(String tag) {
         this.tag = tag;
+    }
+
+    // Update RetreivedTags based on FlashCard table
+    static public void updateFlashcard(String tag, FlashCard flashcard){
+        if( tagQuestions.containsKey(tag))
+        {
+            FlashCardTag f = tagQuestions.get(tag);
+            f.RetreivedQuestions.add(flashcard);
+        } else {
+            FlashCardTag f = new FlashCardTag(tag);
+            f.RetreivedQuestions.add(flashcard);
+            tagQuestions.put(tag,f);
+        }
+    }
+
+    static public List<FlashCard> getFlashCardSet(String tag){
+        return tagQuestions.get(tag).getQuestions();
     }
 }
