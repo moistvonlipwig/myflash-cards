@@ -1,6 +1,8 @@
 package org.teliinc.myflash_cards.Activties;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,15 +15,13 @@ import org.teliinc.myflash_cards.R;
  */
 public class BaseMenuClass extends AppCompatActivity {
 
-    public void showSettings()
-    {
+    public void showSettings() {
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
 
         // Build Dynamic Menu
         // Add either a "photo" or "finish" button to the action bar, depending on which page
@@ -64,7 +64,15 @@ public class BaseMenuClass extends AppCompatActivity {
     }
 
     private void showBrowsePage() {
-        Intent intent = new Intent(this, BrowseCards.class);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        int browseType = Integer.parseInt(sharedPref.getString("pref_browseType", "0"));
+
+        Intent intent;
+        if (browseType == 0)
+            intent = new Intent(this, BrowseCards.class);
+        else
+            intent = new Intent(this, BrowseTags.class);
+        
         startActivity(intent);
     }
 

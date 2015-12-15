@@ -13,7 +13,6 @@ import org.teliinc.myflash_cards.R;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
-    // TODO : Settings
     public SettingsFragment() {
         // Required empty public constructor
     }
@@ -41,18 +40,6 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-        Log.d("Debug","Preferences changed");
-        //Synchronization changed
-        if (key.equals("pref_sync"))
-        {
-            // Change summary
-            Log.d("Debug",key);
-
-            CheckBoxPreference syncPref = (CheckBoxPreference) findPreference(key);
-            if(syncPref.isChecked())
-                syncPref.setSummary("Checked on");
-            else
-                syncPref.setSummary("Checked off");
-        }
+        Log.d("Chaging value for:",key);
     }
 }

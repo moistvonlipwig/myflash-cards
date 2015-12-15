@@ -23,8 +23,8 @@
     </string-array>
 
     <string-array name="pref_browseTypes_entries">
-        <item>Question</item>
-        <item>Answer</item>
+        <item>Flashcards</item>
+        <item>Tags</item>
     </string-array>
 
     <string-array name="pref_browseTypes_values">
@@ -32,8 +32,10 @@
         <item>1</item>
     </string-array>
 
-    <string name="pref_browseTypes_default">1</string>
-    <string name="pref_flasehcardTypes_default">1</string>
+    <string name="pref_flashcardType">pref_flashcardType</string>
+    <string name="pref_browseType">pref_browseType</string>
+    <string name="pref_browseTypes_default">0</string>
+    <string name="pref_flashcardTypes_default">0</string>
 
     <!-- Flashcard Titles -->
     <string name="card_question">Question</string>

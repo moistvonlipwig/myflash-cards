@@ -16,6 +16,6 @@
         android:dialogTitle="Flashcard type selection"
         android:entries="@array/pref_flashcardTypes_entries"
         android:entryValues="@array/pref_flashcardTypes_values"
-        android:defaultValue="@string/pref_browseTypes_default" />
+        android:defaultValue="@string/pref_flashcardTypes_default" />
 
 </PreferenceScreen>

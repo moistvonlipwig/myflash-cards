@@ -115,33 +115,6 @@ public class LaunchScreenActivity extends AppCompatActivity {
 
             });
 
-//            // Read Tag data and store
-//            // Read the data and store in FlashCards
-//            firebaseRef.child("Tags").addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot snapshot) {
-//                    // Iterate through the list and store in list
-//                    int count = 0;
-//                    // This function is called everytime something changes so I have to reset the data
-//                    // TODO : Progress bar does not feel right
-//                    FlashCard.RetreivedFlashCards.clear();
-//                    progress.setMax(100 + (int) snapshot.getChildrenCount());
-//                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-//                        publishProgress(count++);
-//                        Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
-//                        FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
-//                        FlashCard.RetreivedFlashCards.add(f);
-//                    }
-//                }
-//
-//                @Override
-//                public void onCancelled(FirebaseError firebaseError) {
-//                    System.out.println("The read failed: " + firebaseError.getMessage());
-//                }
-//
-//            });
-
-
             return "Tast Completed";
         }
 

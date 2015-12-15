@@ -54,4 +54,10 @@ public class FlashCardTag {
     static public List<FlashCard> getFlashCardSet(String tag){
         return tagQuestions.get(tag).getQuestions();
     }
+
+    public static List<String> getTags() {
+        List tagsList = new ArrayList<>();
+        tagsList.addAll(tagQuestions.keySet());
+        return tagsList;
+    }
 }

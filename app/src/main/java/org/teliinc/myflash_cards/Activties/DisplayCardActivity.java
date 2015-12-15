@@ -3,8 +3,10 @@ package org.teliinc.myflash_cards.Activties;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -111,7 +113,13 @@ public class DisplayCardActivity extends BaseMenuClass implements FragmentManage
                                  Bundle savedInstanceState) {
             View fragmentView = inflater.inflate(R.layout.fragment_card_front, container, false);
             TextView TextViewQuestion = (TextView) fragmentView.findViewById(R.id.textCardQuestion);
-            TextViewQuestion.setText(extras.getString("QUESTION"));
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            int flashcardType = Integer.parseInt(sharedPref.getString("pref_flashcardType", "0"));
+            if ( flashcardType == 0  )
+                TextViewQuestion.setText(extras.getString("QUESTION"));
+            else
+                TextViewQuestion.setText(extras.getString("ANSWER"));
 
             TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCardFront);
             ArrayList<String> TAGS = extras.getStringArrayList("TAGS");
@@ -132,6 +140,13 @@ public class DisplayCardActivity extends BaseMenuClass implements FragmentManage
             View fragmentView = inflater.inflate(R.layout.fragment_card_back, container, false);
             TextView TextViewAnswer = (TextView) fragmentView.findViewById(R.id.textCardAnswer);
             TextViewAnswer.setText(extras.getString("ANSWER"));
+
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+            int flashcardType = Integer.parseInt(sharedPref.getString("pref_flashcardType", "0"));
+            if ( flashcardType == 0  )
+                TextViewAnswer.setText(extras.getString("ANSWER"));
+            else
+                TextViewAnswer.setText(extras.getString("QUESTION"));
 
             TagGroup hashTag = (TagGroup)fragmentView.findViewById(R.id.tagsCardBack);
             ArrayList<String> TAGS = extras.getStringArrayList("TAGS");

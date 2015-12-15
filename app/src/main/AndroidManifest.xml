@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".Activties.DisplayCardActivity" >
         </activity>
+        <activity android:name=".Activties.BrowseTags" >
+        </activity>
     </application>
 
 </manifest>
