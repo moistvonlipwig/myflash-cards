@@ -56,6 +56,8 @@ public class LaunchScreenActivity extends AppCompatActivity {
         // Download in AsyncTask
         // new AsyncDataLoad().execute(0);
         // To run in parallel
+        //readData();
+        //changeIntent();
         new AsyncDataLoad().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
     }
 
@@ -70,51 +72,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... Params) {
 
-            // Get Flashcard Ref
-            firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/");
-            marker=40;
-            progress.setProgress(marker);
-
-            FlashCard.RetreivedFlashCards = new ArrayList<>();
-            FlashCardTag.tagQuestions = new HashMap<String, FlashCardTag>();
-            marker=80;
-            progress.setProgress(marker);
-
-            // Read the flashcard data and store in FlashCards
-            firebaseRef.child("FlashCards").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot snapshot) {
-                    // Iterate through the list and store in list
-                    int count = 0;
-                    // This function is called everytime something changes so I have to reset the data
-                    // TODO : Progress bar does not feel right
-                    FlashCard.RetreivedFlashCards.clear();
-                    progress.setMax(100 + (int) snapshot.getChildrenCount());
-                    for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        publishProgress(count++);
-                        Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
-                        FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
-
-                        // Read the tags and update the flashcard
-                        Map<String, String> tags = (Map<String, String>) postSnapshot.child("Tags").getValue();
-                        f.setTags(tags.keySet());
-
-                        FlashCard.RetreivedFlashCards.add(f);
-
-                        // Iterate through the tags and setup the Tag Hashset
-                        for(String tag : tags.keySet()) {
-                            FlashCardTag.updateFlashcard(tag,f);
-                        }
-                    }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-                    System.out.println("The read failed: " + firebaseError.getMessage());
-                }
-
-            });
-
+            readData();
             return "Tast Completed";
         }
 
@@ -122,9 +80,7 @@ public class LaunchScreenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
-            progress.dismiss();
-            Intent intent = new Intent(getBaseContext(), MainActivity.class);
-            startActivity(intent);
+            changeIntent();
             // close this activity
             finish();
         }
@@ -134,6 +90,64 @@ public class LaunchScreenActivity extends AppCompatActivity {
             progress.setProgress(marker++);
             Log.i("ProgressUpdate", "Updating" + values[0]);
         }
+    }
+
+    void readData()
+    {
+        // Get Flashcard Ref
+        firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/");
+        marker=40;
+        progress.setProgress(marker);
+
+        FlashCard.RetreivedFlashCards = new ArrayList<>();
+        FlashCardTag.tagQuestions = new HashMap<String, FlashCardTag>();
+        marker=80;
+        progress.setProgress(marker);
+
+        // Read the flashcard data and store in FlashCards
+        firebaseRef.child("FlashCards").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot snapshot) {
+                // Iterate through the list and store in list
+                int count = 0;
+                // This function is called everytime something changes so I have to reset the data
+                // TODO : Progress bar does not feel right
+                FlashCard.RetreivedFlashCards.clear();
+                FlashCardTag.tagQuestions.clear();
+                progress.setMax(100 + (int) snapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    progress.setProgress(count++);
+                    Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
+                    FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
+
+                    // Read the tags and update the flashcard
+                    Map<String, String> tags = (Map<String, String>) postSnapshot.child("Tags").getValue();
+                    // When object is first created it has no tags
+                    if ( tags != null) {
+                        f.setTags(tags.keySet());
+
+                        FlashCard.RetreivedFlashCards.add(f);
+
+                        // Iterate through the tags and setup the Tag Hashset
+                        for (String tag : tags.keySet()) {
+                            FlashCardTag.updateFlashcard(tag, f);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+                System.out.println("The read failed: " + firebaseError.getMessage());
+            }
+
+        });
+    }
+
+    void changeIntent(){
+        progress.dismiss();
+        Intent intent = new Intent(getBaseContext(), MainActivity.class);
+        startActivity(intent);
     }
 }
 

@@ -1,6 +1,8 @@
 package org.teliinc.myflash_cards.RecyclierViewHelpers;
 
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,7 +16,7 @@ import java.util.List;
 public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardViewHolder> {
 
     List<FlashCard> Flashcards;
-
+    RecyclerView rv;
     public FlashcardAdapter(List<FlashCard> Flashcards) {
         this.Flashcards = Flashcards;
     }
@@ -22,6 +24,7 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardViewHolder> 
     @Override
     public void onAttachedToRecyclerView(RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+        this.rv = recyclerView;
     }
 
     @Override
@@ -33,7 +36,12 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardViewHolder> 
 
     @Override
     public void onBindViewHolder(FlashcardViewHolder flashcardViewHolder, int i) {
-        flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getQuestion());
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(rv.getContext());
+        int flashcardType = Integer.parseInt(sharedPref.getString("pref_flashcardType", "0"));
+        if (flashcardType == 0)
+            flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getQuestion());
+        else
+            flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getAnswer());
     }
 
     @Override
