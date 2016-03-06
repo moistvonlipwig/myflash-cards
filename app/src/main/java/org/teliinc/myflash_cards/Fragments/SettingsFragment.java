@@ -3,13 +3,14 @@ package org.teliinc.myflash_cards.Fragments;
 /**
  * Created by cteli on 11/14/2015.
  */
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 import org.teliinc.myflash_cards.R;
+
+import timber.log.Timber;
 
 public class SettingsFragment extends PreferenceFragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -38,8 +39,7 @@ public class SettingsFragment extends PreferenceFragment implements SharedPrefer
     }
 
     @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
-    {
-        Log.d("Chaging value for:",key);
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Timber.d("Chaging value for:", key);
     }
 }

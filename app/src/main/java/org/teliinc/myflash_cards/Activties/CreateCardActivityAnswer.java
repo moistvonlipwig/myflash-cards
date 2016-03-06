@@ -2,7 +2,6 @@ package org.teliinc.myflash_cards.Activties;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,8 +11,6 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
-import org.teliinc.myflash_cards.Activties.BaseMenuClass;
-import org.teliinc.myflash_cards.Activties.MainActivity;
 import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.R;
 
@@ -27,6 +24,7 @@ import java.util.concurrent.CountDownLatch;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class CreateCardActivityAnswer extends BaseMenuClass {
 
@@ -79,9 +77,9 @@ public class CreateCardActivityAnswer extends BaseMenuClass {
             public void onComplete(FirebaseError firebaseError, Firebase firebase) {
                 if (firebaseError != null) {
                     WriteStatus = false;
-                    Log.d("FireBase Write", "Data could not be saved. " + firebaseError.getMessage());
+                    Timber.d("FireBase Write", "Data could not be saved. " + firebaseError.getMessage());
                 } else {
-                    Log.d("FireBase Write", "Data saved successfully. Finishing activity...");
+                    Timber.d("FireBase Write", "Data saved successfully. Finishing activity...");
                     WriteStatus = true;
                     finish();
                 }
@@ -130,14 +128,14 @@ public class CreateCardActivityAnswer extends BaseMenuClass {
         try {
             done.await();
         } catch (Exception e) {
-            Log.d("Firebase Write error:", e.getMessage());
+            Timber.d("Firebase Write error:", e.getMessage());
         }
 
         // If successful display message and go back to main screen
         if (WriteStatus) {
-            Log.d("Saving Card", "Switching to Main");
+            Timber.d("Saving Card", "Switching to Main");
         } else
-            Log.d("Saving Card", "Error State");
+            Timber.d("Saving Card", "Error State");
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

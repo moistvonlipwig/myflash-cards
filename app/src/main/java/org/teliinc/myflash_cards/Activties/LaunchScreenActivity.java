@@ -2,34 +2,28 @@ package org.teliinc.myflash_cards.Activties;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.crashlytics.android.Crashlytics;
 import com.firebase.client.AuthData;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 import com.firebase.ui.auth.core.AuthProviderType;
 import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
 import com.firebase.ui.auth.core.FirebaseLoginError;
 
-import org.teliinc.myflash_cards.Model.FlashCard;
-import org.teliinc.myflash_cards.Model.FlashCardTag;
+import org.teliinc.myflash_cards.BuildConfig;
 import org.teliinc.myflash_cards.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import io.fabric.sdk.android.Fabric;
+import timber.log.Timber;
 
 public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
 
-    // Tag for log messages
-    final String TAG = "FlashCard";
     // Flashcard Reference
     static public Firebase firebaseRef;
-
+    // Tag for log messages
+    final String TAG = "FlashCard";
     // Progress Marker
     int marker = 0;
     // ProgressBar for loading data
@@ -40,7 +34,14 @@ public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_launch_screen);
+
+        // Setup Timber
+        if (BuildConfig.DEBUG) {
+            Timber.plant(new Timber.DebugTree());
+        }
+        Timber.plant(new CrashlyticsTree());
 
         // Setup Firebase
         Firebase.setAndroidContext(this);
@@ -77,19 +78,19 @@ public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
 
     @Override
     public void onFirebaseLoginProviderError(FirebaseLoginError firebaseError) {
-        Log.e(TAG, "Login provider error: " + firebaseError.toString());
+        Timber.e(TAG, "Login provider error: " + firebaseError.toString());
         resetFirebaseLoginPrompt();
     }
 
     @Override
     public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
-        Log.e(TAG, "Login user error: " + firebaseError.toString());
+        Timber.e(TAG, "Login user error: " + firebaseError.toString());
         resetFirebaseLoginPrompt();
     }
 
     @Override
     public void onFirebaseLoggedIn(AuthData authData) {
-        Log.i(TAG, "Logged in to " + authData.getProvider().toString());
+        Timber.i(TAG, "Logged in to " + authData.getProvider().toString());
 
         switch (authData.getProvider()) {
             case "password":
@@ -108,7 +109,7 @@ public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
 
     @Override
     public void onFirebaseLoggedOut() {
-        Log.i(TAG, "Logged out");
+        Timber.i(TAG, "Logged out");
         mName = "";
         invalidateOptionsMenu();
     }
@@ -117,6 +118,30 @@ public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
         progress.dismiss();
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);
+    }
+
+    // Tree for logging
+    public class CrashlyticsTree extends Timber.Tree {
+        private static final String CRASHLYTICS_KEY_PRIORITY = "priority";
+        private static final String CRASHLYTICS_KEY_TAG = "tag";
+        private static final String CRASHLYTICS_KEY_MESSAGE = "message";
+
+        @Override
+        protected void log(int priority, String tag, String message, Throwable t) {
+            if (priority == Log.VERBOSE || priority == Log.DEBUG || priority == Log.INFO) {
+                return;
+            }
+
+            Crashlytics.setInt(CRASHLYTICS_KEY_PRIORITY, priority);
+            Crashlytics.setString(CRASHLYTICS_KEY_TAG, tag);
+            Crashlytics.setString(CRASHLYTICS_KEY_MESSAGE, message);
+
+            if (t == null) {
+                Crashlytics.logException(new Exception(message));
+            } else {
+                Crashlytics.logException(t);
+            }
+        }
     }
 }
 

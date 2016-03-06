@@ -27,7 +27,7 @@ public class MainActivity extends BaseMenuClass {
     }
 
     public void createCards(View view) {
-        Intent intent = new Intent(this, CreateCardActivity.class);
+        Intent intent = new Intent(this, QuizCreateActivity.class);
         startActivity(intent);
     }
 
