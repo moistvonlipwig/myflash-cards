@@ -3,14 +3,17 @@ package org.teliinc.myflash_cards.Activties;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.firebase.client.AuthData;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+import com.firebase.ui.auth.core.AuthProviderType;
+import com.firebase.ui.auth.core.FirebaseLoginBaseActivity;
+import com.firebase.ui.auth.core.FirebaseLoginError;
 
 import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.Model.FlashCardTag;
@@ -20,28 +23,33 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LaunchScreenActivity extends AppCompatActivity {
+public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
 
-    // ProgressBar for loading data
-    private ProgressDialog progress;
-
+    // Tag for log messages
+    final String TAG = "FlashCard";
     // Flashcard Reference
-    Firebase firebaseRef;
+    static public Firebase firebaseRef;
 
     // Progress Marker
     int marker = 0;
+    // ProgressBar for loading data
+    private ProgressDialog progress;
+    // String Name of authorization
+    private String mName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch_screen);
 
-
         // Setup Firebase
         Firebase.setAndroidContext(this);
 
+        // Get Flashcard Ref
+        firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/FlashCards");
+
         // Initialized the ProgressDialog and Start download
-        progress=new ProgressDialog(this);
+        progress = new ProgressDialog(this);
         progress.setMessage("Downloading FlashCards");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
@@ -53,98 +61,59 @@ public class LaunchScreenActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        // Download in AsyncTask
-        // new AsyncDataLoad().execute(0);
-        // To run in parallel
-        //readData();
-        //changeIntent();
-        new AsyncDataLoad().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+
+        //setEnabledAuthProvider(AuthProviderType.FACEBOOK);
+        //setEnabledAuthProvider(AuthProviderType.TWITTER);
+        setEnabledAuthProvider(AuthProviderType.GOOGLE);
+        setEnabledAuthProvider(AuthProviderType.PASSWORD);
+        showFirebaseLoginPrompt();
     }
 
-    class AsyncDataLoad extends AsyncTask<Integer, Integer, String> {
-
-        // Initialize the progressbar
-        protected void onPreExecute() {
-            //do initialization of required objects objects here
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Integer... Params) {
-
-            readData();
-            return "Tast Completed";
-        }
-
-
-        @Override
-        protected void onPostExecute(String result) {
-            super.onPostExecute(result);
-            changeIntent();
-            // close this activity
-            finish();
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            progress.setProgress(marker++);
-            Log.i("ProgressUpdate", "Updating" + values[0]);
-        }
+    @Override
+    public Firebase getFirebaseRef() {
+        // Return your Firebase ref
+        return firebaseRef;
     }
 
-    void readData()
-    {
-        // Get Flashcard Ref
-        firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/");
-        marker=40;
-        progress.setProgress(marker);
-
-        FlashCard.RetreivedFlashCards = new ArrayList<>();
-        FlashCardTag.tagQuestions = new HashMap<String, FlashCardTag>();
-        marker=80;
-        progress.setProgress(marker);
-
-        // Read the flashcard data and store in FlashCards
-        firebaseRef.child("FlashCards").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                // Iterate through the list and store in list
-                int count = 0;
-                // This function is called everytime something changes so I have to reset the data
-                // TODO : Progress bar does not feel right
-                FlashCard.RetreivedFlashCards.clear();
-                FlashCardTag.tagQuestions.clear();
-                progress.setMax(100 + (int) snapshot.getChildrenCount());
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    progress.setProgress(count++);
-                    Map<String, String> map = (Map<String, String>) postSnapshot.getValue();
-                    FlashCard f = new FlashCard(map.get("answer"), map.get("question"));
-
-                    // Read the tags and update the flashcard
-                    Map<String, String> tags = (Map<String, String>) postSnapshot.child("Tags").getValue();
-                    // When object is first created it has no tags
-                    if ( tags != null) {
-                        f.setTags(tags.keySet());
-
-                        FlashCard.RetreivedFlashCards.add(f);
-
-                        // Iterate through the tags and setup the Tag Hashset
-                        for (String tag : tags.keySet()) {
-                            FlashCardTag.updateFlashcard(tag, f);
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-                System.out.println("The read failed: " + firebaseError.getMessage());
-            }
-
-        });
+    @Override
+    public void onFirebaseLoginProviderError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login provider error: " + firebaseError.toString());
+        resetFirebaseLoginPrompt();
     }
 
-    void changeIntent(){
+    @Override
+    public void onFirebaseLoginUserError(FirebaseLoginError firebaseError) {
+        Log.e(TAG, "Login user error: " + firebaseError.toString());
+        resetFirebaseLoginPrompt();
+    }
+
+    @Override
+    public void onFirebaseLoggedIn(AuthData authData) {
+        Log.i(TAG, "Logged in to " + authData.getProvider().toString());
+
+        switch (authData.getProvider()) {
+            case "password":
+                mName = (String) authData.getProviderData().get("email");
+                break;
+            default:
+                mName = (String) authData.getProviderData().get("displayName");
+                break;
+        }
+
+        invalidateOptionsMenu();
+        //new AsyncDataLoad().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        //mRecycleViewAdapter.notifyDataSetChanged();
+        changeIntent();
+    }
+
+    @Override
+    public void onFirebaseLoggedOut() {
+        Log.i(TAG, "Logged out");
+        mName = "";
+        invalidateOptionsMenu();
+    }
+
+    void changeIntent() {
         progress.dismiss();
         Intent intent = new Intent(getBaseContext(), MainActivity.class);
         startActivity(intent);

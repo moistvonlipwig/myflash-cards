@@ -7,21 +7,19 @@ import android.view.View;
 import android.widget.TextView;
 
 import org.teliinc.myflash_cards.R;
+import org.w3c.dom.Text;
 
 /**
  * Created by cteli on 12/11/2015.
  */
 public class FlashcardViewHolder extends RecyclerView.ViewHolder {
-    CardView cv;
-    TextView textViewQuestion;
+    View mView;
 
     FlashcardViewHolder(View itemView) {
         super(itemView);
-        cv = (CardView) itemView.findViewById(R.id.cv);
-        textViewQuestion = (TextView) itemView.findViewById(R.id.textViewQuestion);
     }
 
     public void setQuestion(String question) {
-        textViewQuestion.setText(question);
+        ((TextView) itemView.findViewById(R.id.textViewAnswer)).setText(question);
     }
 }

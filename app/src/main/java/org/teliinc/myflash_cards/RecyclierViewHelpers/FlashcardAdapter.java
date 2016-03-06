@@ -38,11 +38,7 @@ public class FlashcardAdapter extends RecyclerView.Adapter<FlashcardViewHolder> 
     public void onBindViewHolder(FlashcardViewHolder flashcardViewHolder, int i) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(rv.getContext());
         int flashcardType = Integer.parseInt(sharedPref.getString("pref_flashcardType", "0"));
-        if (flashcardType == 0)
-            flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getQuestion());
-        else
-            flashcardViewHolder.textViewQuestion.setText(Flashcards.get(i).getAnswer());
-    }
+            }
 
     @Override
     public int getItemCount() {

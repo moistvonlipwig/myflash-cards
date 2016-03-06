@@ -12,8 +12,14 @@ public class FlashCard {
     private String Question;
     private String Answer;
     private Set<String> Tags;
-    public static List<FlashCard> RetreivedFlashCards;
 
+    public FlashCard()
+    {
+        Answer = "";
+        Question = "";
+        Tags = new HashSet<String>();
+
+    }
     public FlashCard(String ans, String ques)
     {
         Answer = ans;

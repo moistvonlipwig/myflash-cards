@@ -54,17 +54,7 @@ public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListen
             Intent intent = new Intent(view.getContext(), DisplayCardActivity.class);
             Bundle extras = ((Activity)context).getIntent().getExtras();
             ArrayList<String> tagsList = new ArrayList<>();
-            if(browseType==0) {
-                intent.putExtra("QUESTION", FlashCard.RetreivedFlashCards.get(position).getQuestion());
-                intent.putExtra("ANSWER", FlashCard.RetreivedFlashCards.get(position).getAnswer());
-                tagsList.addAll(FlashCard.RetreivedFlashCards.get(position).getTags());
-            } else {
-                String tag = extras.getString("TAG");
-                intent.putExtra("QUESTION", FlashCardTag.tagQuestions.get(tag).RetreivedQuestions.get(position).getQuestion());
-                intent.putExtra("ANSWER", FlashCardTag.tagQuestions.get(tag).RetreivedQuestions.get(position).getAnswer());
-                tagsList.addAll(FlashCardTag.tagQuestions.get(tag).RetreivedQuestions.get(position).getTags());
 
-            }
             intent.putStringArrayListExtra("TAGS", tagsList);
             view.getContext().startActivity(intent);
         }

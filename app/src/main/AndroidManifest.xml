@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="org.teliinc.myflash_cards" >
+    package="org.teliinc.myflash_cards"
+    android:installLocation="preferExternal">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,6 +10,7 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
+
         android:theme="@style/AppTheme" >
         <activity android:name=".Activties.MainActivity" />
         <activity android:name=".Activties.SettingsActivity" />
@@ -21,12 +23,9 @@
         </activity>
         <activity android:name=".Activties.CreateCardActivity" />
         <activity android:name=".Activties.CreateCardActivityAnswer" />
-        <activity android:name=".Activties.BrowseCards" >
-        </activity>
-        <activity android:name=".Activties.DisplayCardActivity" >
-        </activity>
-        <activity android:name=".Activties.BrowseTags" >
-        </activity>
+        <activity android:name=".Activties.BrowseCards" />
+        <activity android:name=".Activties.DisplayCardActivity" />
+        <activity android:name=".Activties.BrowseTags" />
     </application>
 
 </manifest>
