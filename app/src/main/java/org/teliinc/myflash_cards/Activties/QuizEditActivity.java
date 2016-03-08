@@ -37,7 +37,7 @@ import hugo.weaving.DebugLog;
 import timber.log.Timber;
 
 
-public class QuizCreateActivity extends BaseMenuClass {
+public class QuizEditActivity extends BaseMenuClass {
 
     @Bind(R.id.question_list)
     SwipeMenuListView listView;
@@ -59,7 +59,13 @@ public class QuizCreateActivity extends BaseMenuClass {
 
         ButterKnife.bind(this);
 
-        mFlashcardList = new ArrayList<FlashCard>();
+        // Initialize activity from quiz passed from intent
+        quiz = (Quiz) Parcels.unwrap(getIntent().getParcelableExtra("quiz"));
+
+        EditTitle.setText(quiz.getTitle());
+        EditDescription.setText(quiz.getDescription());
+
+        mFlashcardList = quiz.getFlashCards();
         mFlashcardAdapter = new FlashcardAdapterMenu();
 
         listView.setAdapter(mFlashcardAdapter);
@@ -98,6 +104,8 @@ public class QuizCreateActivity extends BaseMenuClass {
                 menu.addMenuItem(item3);
                 */
             }
+
+            // TODO: Edit FlashCard
         };
         // set creator
         listView.setMenuCreator(creator);
@@ -140,7 +148,7 @@ public class QuizCreateActivity extends BaseMenuClass {
 
         if ( TextUtils.isEmpty(title) || TextUtils.isEmpty(description))
         {
-            Toast.makeText(this,"Title or Description is Empty",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,"Title or Description is Empty",Toast.LENGTH_SHORT);
             return;
         }
         quiz = new Quiz(title,description);

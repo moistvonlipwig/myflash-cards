@@ -1,5 +1,7 @@
 package org.teliinc.myflash_cards.Model;
 
+import org.parceler.Parcel;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,11 +9,15 @@ import java.util.Set;
 /**
  * Created by cteli on 11/29/2015.
  */
+@Parcel
 public class FlashCard {
 
-    private String Question;
-    private String Answer;
+    public static final int FLASHCARD_CREATED = 1000;
+    public String Question;
+    public String Answer;
+    public List<String> Tags;
 
+    // Needed by parceler
     public FlashCard()
     {
         Answer = "";
@@ -38,5 +44,13 @@ public class FlashCard {
 
     public void setAnswer(String answer) {
         Answer = answer;
+    }
+
+    public List<String> getTags() {
+        return Tags;
+    }
+
+    public void setTags(List<String> tags) {
+        Tags = tags;
     }
 }

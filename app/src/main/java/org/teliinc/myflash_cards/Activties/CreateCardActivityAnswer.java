@@ -1,10 +1,15 @@
 package org.teliinc.myflash_cards.Activties;
 
+import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -18,6 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
@@ -26,7 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class CreateCardActivityAnswer extends BaseMenuClass {
+public class CreateCardActivityAnswer extends Activity {
 
     @Bind(R.id.button_create_answer)
     Button button_create;
@@ -42,6 +48,8 @@ public class CreateCardActivityAnswer extends BaseMenuClass {
     private Map<String, Object> TagQuestion, QuestionTag;
     private String CurrentTag;
 
+    private final int REQ_CODE_SPEECH_INPUT = 100;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +60,14 @@ public class CreateCardActivityAnswer extends BaseMenuClass {
             Question = extras.getString("QUESTION");
         }
         ButterKnife.bind(this);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        int width = dm.widthPixels;
+        int height = dm.heightPixels;
+
+        getWindow().setLayout((int) (width * 0.9), (int) (height * 0.75));
     }
 
     @OnClick(R.id.button_create_answer)
@@ -137,7 +153,46 @@ public class CreateCardActivityAnswer extends BaseMenuClass {
         } else
             Timber.d("Saving Card", "Error State");
 
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        // Just close the activity
+        this.finish();
+    }
+
+    @OnClick(R.id.btnSpeak)
+    public void speect_to_question(View view) {
+
+        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
+                getString(R.string.speech_prompt));
+        try {
+            startActivityForResult(intent, REQ_CODE_SPEECH_INPUT);
+        } catch (ActivityNotFoundException a) {
+            Toast.makeText(getApplicationContext(),
+                    getString(R.string.speech_not_supported),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    /**
+     * Receiving speech input
+     * */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case REQ_CODE_SPEECH_INPUT: {
+                if (resultCode == RESULT_OK && null != data) {
+
+                    ArrayList<String> result = data
+                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                    editTextAnswer.setText(result.get(0));
+                }
+                break;
+            }
+
+        }
     }
 }

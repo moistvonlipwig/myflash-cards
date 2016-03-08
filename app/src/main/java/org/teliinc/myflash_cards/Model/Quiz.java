@@ -1,5 +1,7 @@
 package org.teliinc.myflash_cards.Model;
 
+import org.parceler.Parcel;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -7,10 +9,11 @@ import java.util.Set;
 /**
  * Created by chris.teli on 3/5/2016.
  */
+@Parcel
 public class Quiz {
-    private List<FlashCard> flashCards;
-    private String Title;
-    private String Description;
+    public List<FlashCard> flashCards;
+    public String Title;
+    public String Description;
 
     public Quiz()
     {

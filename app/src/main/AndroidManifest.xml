@@ -20,8 +20,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Activties.CreateCardActivity" />
-        <activity android:name=".Activties.CreateCardActivityAnswer" />
+        <activity
+            android:name=".Activties.CreateCardActivity"
+            android:theme="@style/AppTheme.popup" />
+        <activity
+            android:name=".Activties.CreateCardActivityAnswer"
+            android:theme="@style/AppTheme.popup" />
         <activity android:name=".Activties.BrowseCards" />
         <activity android:name=".Activties.DisplayCardActivity" />
         <activity android:name=".Activties.BrowseTags" />
@@ -30,7 +34,9 @@
             android:name="io.fabric.ApiKey"
             android:value="44ab7c34773fefc3e562cb803f4a1dd092998934" />
 
-        <activity android:name=".Activties.QuizCreateActivity"></activity>
+        <activity android:name=".Activties.QuizCreateActivity" />
+        <activity android:name=".Activties.QuizEditActivity" />
+        <activity android:name=".Activties.BrowseQuizzes"></activity>
     </application>
 
 </manifest>

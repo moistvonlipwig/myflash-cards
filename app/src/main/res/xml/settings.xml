@@ -2,8 +2,8 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:key="pref_browseType"
-        android:title="Browse based on tags or questions"
-        android:summary="How do you want to browse for cards"
+        android:title="Browse public quizzes"
+        android:summary="Do you want to access public quizzes"
         android:dialogTitle="Browse type selection"
         android:entries="@array/pref_browseTypes_entries"
         android:entryValues="@array/pref_browseTypes_values"
@@ -11,9 +11,9 @@
 
     <ListPreference
         android:key="pref_flashcardType"
-        android:title="Flashcard Type"
-        android:summary="What do you want to see on the front of the card?"
-        android:dialogTitle="Flashcard type selection"
+        android:title="Quiz Answer Mode"
+        android:summary="Change default 'Swipe Left' for got it right"
+        android:dialogTitle="Quiz Answer Mode"
         android:entries="@array/pref_flashcardTypes_entries"
         android:entryValues="@array/pref_flashcardTypes_values"
         android:defaultValue="@string/pref_flashcardTypes_default" />

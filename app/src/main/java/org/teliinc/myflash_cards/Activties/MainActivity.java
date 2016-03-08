@@ -26,22 +26,20 @@ public class MainActivity extends BaseMenuClass {
 
     }
 
-    public void createCards(View view) {
+    public void createQuiz(View view) {
         Intent intent = new Intent(this, QuizCreateActivity.class);
         startActivity(intent);
     }
 
-    public void browseCards(View view) {
-        // Browse card based on settings file
+    public void browseQuizzes(View view) {
+        // Browse quizzes based on settings file
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         int browseType = Integer.parseInt(sharedPref.getString("pref_browseType", "0"));
 
-        Intent intent;
-        if (browseType == 0)
-            intent = new Intent(this, BrowseCards.class);
-        else
-            intent = new Intent(this, BrowseTags.class);
+        // TODO : Change Preferences to public/user
 
+        // Start new intent
+        Intent intent = new Intent(this, BrowseQuizzes.class);
         startActivity(intent);
     }
 

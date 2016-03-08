@@ -64,15 +64,7 @@ public class BaseMenuClass extends AppCompatActivity {
     }
 
     private void showBrowsePage() {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        int browseType = Integer.parseInt(sharedPref.getString("pref_browseType", "0"));
-
-        Intent intent;
-        if (browseType == 0)
-            intent = new Intent(this, BrowseCards.class);
-        else
-            intent = new Intent(this, BrowseTags.class);
-        
+        Intent intent = new Intent(this, BrowseQuizzes.class);
         startActivity(intent);
     }
 

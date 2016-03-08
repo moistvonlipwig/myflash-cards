@@ -1,40 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#c8e6c9"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:orientation="vertical"
-    android:background="#c8e6c9"
     tools:context="org.teliinc.myflash_cards.Activties.CreateCardActivity">
 
     <TextView
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/enter_questions"
-        android:id="@+id/textView"
-        android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:paddingBottom="20dp"
+        android:text="@string/tap_on_mic"
         android:textSize="24sp" />
 
     <EditText
+        android:id="@+id/editTextQuestion"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="120dp"
+        android:autoText="false"
+        android:background="@drawable/shape"
+        android:ems="10"
+        android:hint="Question"
+        android:inputType="textMultiLine"
+        android:padding="20dp" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
         android:inputType="textMultiLine"
         android:ems="10"
-        android:id="@+id/editTextQuestion"
+        android:id="@+id/editTextAnswer"
         android:autoText="false"
         android:padding="20dp"
+        android:hint="Answer"
         android:background="@drawable/shape"/>
 
-    <Button
-        android:layout_margin="20dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Enter Answer"
-        android:id="@+id/button_create_question"
-        android:layout_gravity="center_horizontal" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/editTextTags"
+        android:autoText="false"
+        android:padding="10dp"
+        android:hint="Tags"
+        />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:paddingBottom="@dimen/activity_vertical_margin">
+
+        <Button
+            android:id="@+id/button_create_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:text="Create Card"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="false"
+            />
+        <ImageButton
+            android:id="@+id/btnSpeak"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ico_mic"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="false"
+            android:layout_alignParentEnd="true"
+            android:layout_gravity="top"/>
+
+    </RelativeLayout>
 </LinearLayout>

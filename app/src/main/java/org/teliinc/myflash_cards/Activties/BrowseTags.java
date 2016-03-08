@@ -1,23 +1,17 @@
 package org.teliinc.myflash_cards.Activties;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.Model.FlashCardTag;
 import org.teliinc.myflash_cards.R;
-import org.teliinc.myflash_cards.RecyclierViewHelpers.FlashcardAdapter;
-import org.teliinc.myflash_cards.RecyclierViewHelpers.RecyclerItemClickListener;
 import org.teliinc.myflash_cards.RecyclierViewHelpers.RecyclerItemTagClickListener;
 import org.teliinc.myflash_cards.RecyclierViewHelpers.TagAdapter;
 
-import java.util.ArrayList;
-
-public class BrowseTags extends BaseMenuClass  {
+public class BrowseTags extends BaseMenuClass {
 
     RecyclerView BrowseTagsView;
     private RecyclerView.Adapter mAdapter;

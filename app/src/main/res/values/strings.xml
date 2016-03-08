@@ -13,8 +13,8 @@
     <string name="enter_answer">Answer</string>
 
     <string-array name="pref_flashcardTypes_entries">
-        <item>Question</item>
-        <item>Answer</item>
+        <item>Swipe Left for correct answer</item>
+        <item>Swipe Right for correct answer</item>
     </string-array>
 
     <string-array name="pref_flashcardTypes_values">
@@ -23,8 +23,8 @@
     </string-array>
 
     <string-array name="pref_browseTypes_entries">
-        <item>Flashcards</item>
-        <item>Tags</item>
+        <item>Show only my quizzes</item>
+        <item>Show all quizzes</item>
     </string-array>
 
     <string-array name="pref_browseTypes_values">
@@ -40,4 +40,8 @@
     <!-- Flashcard Titles -->
     <string name="card_question">Question</string>
     <string name="card_answer">Answer</string>
+    <string name="speech_prompt">Say something&#8230;</string>
+    <string name="speech_not_supported">Sorry! Your device doesn\'t support speech input</string>
+    <string name="tap_on_mic">Tap on mic to speak</string>
+
 </resources>
