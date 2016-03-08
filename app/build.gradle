@@ -79,4 +79,7 @@ dependencies {
     // Parceler annotations (@Parcel)
     compile 'org.parceler:parceler:1.0.4'
     apt 'org.parceler:parceler:1.0.4'
+
+    compile 'com.lorentzos.swipecards:library:1.0.9@aar'
+
 }

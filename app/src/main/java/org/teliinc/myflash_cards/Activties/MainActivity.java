@@ -9,6 +9,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import com.firebase.client.Firebase;
+import com.firebase.client.Query;
+
+import org.parceler.Parcels;
 import org.teliinc.myflash_cards.R;
 
 import java.util.Map;
@@ -40,6 +44,12 @@ public class MainActivity extends BaseMenuClass {
 
         // Start new intent
         Intent intent = new Intent(this, BrowseQuizzes.class);
+        startActivity(intent);
+    }
+
+    public void startQuiz(View view) {
+        // Start new intent
+        Intent intent = new Intent(this, QuizMe.class);
         startActivity(intent);
     }
 

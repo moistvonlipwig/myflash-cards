@@ -14,35 +14,47 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonElement;
+
 import org.parceler.Parcels;
 import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.R;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Map;
 
+import ai.api.AIConfiguration;
+import ai.api.AIListener;
+import ai.api.AIService;
+import ai.api.model.AIError;
+import ai.api.model.AIResponse;
+import ai.api.model.Result;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import timber.log.Timber;
 
-public class CreateCardActivity extends Activity {
+public class CreateCardActivity extends Activity implements AIListener {
+
+    final AIConfiguration config = new AIConfiguration("5841df7b38144c20a77d46dcc2563f32",
+            "a589bf42-ba8a-42d4-8e34-411d69bb1215", AIConfiguration.SupportedLanguages.English,
+            AIConfiguration.RecognitionEngine.System);
 
     private final int REQ_CODE_SPEECH_QUESTION = 100;
     private final int REQ_CODE_SPEECH_ANSWER = 150;
-
     @Bind(R.id.button_create_question)
     Button button_create;
     @Bind(R.id.editTextQuestion)
     EditText EditTextQuestion;
     @Bind(R.id.editTextAnswer)
     EditText EditTextAnswer;
-    @Bind(R.id.editTextTags)
-    EditText EditTextTags;
-
     // Gesture detection
     GestureDetector gestureDetectorAnswer;
     GestureDetector gestureDetectorQuestion;
+    // AI Configuration
+    private AIService aiService;
+    private String query;
+    private View current_view;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,16 +86,23 @@ public class CreateCardActivity extends Activity {
                 return gestureDetectorQuestion.onTouchEvent(motionEvent);
             }
         });
+
+        // Initial AI
+        query = "";
+        aiService = AIService.getService(this, config);
+        aiService.setListener(this);
     }
 
     @OnClick(R.id.button_create_question)
     public void create_card_question(View view) {
-
         FlashCard flashCard = new FlashCard(EditTextAnswer.getText().toString(),
                 EditTextQuestion.getText().toString());
 
         // Add tags to flashcard
-        flashCard.setTags(new ArrayList<String>(Arrays.asList(EditTextTags.getText().toString().split(" "))));
+        flashCard.setQuery(query);
+
+        // Displaying query
+        Toast.makeText(this,query,Toast.LENGTH_LONG);
 
         // Return created flash object to parent
         Intent intent = new Intent(this, QuizCreateActivity.class);
@@ -92,53 +111,41 @@ public class CreateCardActivity extends Activity {
         super.onBackPressed();
     }
 
-    @OnClick(R.id.btnSpeak)
-    public void speect_to_question(View view) {
-        Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
-        //        RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
-        //intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
-        //intent.putExtra(RecognizerIntent.EXTRA_PROMPT,
-        //        getString(R.string.speech_prompt));
-        try {
-            if (view == EditTextQuestion)
-                startActivityForResult(intent, REQ_CODE_SPEECH_QUESTION);
-            else
-                startActivityForResult(intent, REQ_CODE_SPEECH_ANSWER);
-        } catch (ActivityNotFoundException a) {
-            Toast.makeText(getApplicationContext(),
-                    getString(R.string.speech_not_supported),
-                    Toast.LENGTH_SHORT).show();
+    public void onResult(final AIResponse response) {
+        Result result = response.getResult();
+
+        // Get parameters
+        String parameterString = "";
+        if (result.getParameters() != null && !result.getParameters().isEmpty()) {
+            for (final Map.Entry<String, JsonElement> entry : result.getParameters().entrySet()) {
+                parameterString += "(" + entry.getKey() + ", " + entry.getValue() + ") ";
+            }
+            query = query + " " + parameterString;
         }
+
+        // Show results in TextView.
+        ((EditText)current_view).setText(result.getResolvedQuery());
     }
 
-    /**
-     * Receiving speech input
-     */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    public void onListeningStarted() {
+    }
 
-        switch (requestCode) {
-            case REQ_CODE_SPEECH_ANSWER: {
-                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String sentence = result.get(0);
-                    EditTextAnswer.setText(sentence.substring(7));
-                }
-                break;
-            }
-            case REQ_CODE_SPEECH_QUESTION:{
-                if (resultCode == RESULT_OK && null != data) {
-                    ArrayList<String> result = data
-                            .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    String sentence = result.get(0);
-                    EditTextQuestion.setText(sentence.substring(7));
-                }
-                break;
-            }
-        }
+    @Override
+    public void onListeningCanceled() {
+    }
+
+    @Override
+    public void onListeningFinished() {
+    }
+
+    @Override
+    public void onAudioLevel(final float level) {
+    }
+
+    @Override
+    public void onError(final AIError error) {
+        Toast.makeText(this, error.toString(), Toast.LENGTH_LONG);
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -158,9 +165,9 @@ public class CreateCardActivity extends Activity {
         @Override
         public boolean onDoubleTap(MotionEvent e) {
             Timber.d("Double Tap");
-            speect_to_question(myView);
+            current_view = myView;
+            aiService.startListening();
             return true;
         }
     }
-
 }

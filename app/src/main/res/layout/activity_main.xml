@@ -19,7 +19,8 @@
         card_view:cardUseCompatPadding="true"
         card_view:contentPadding="10dp"
         grid:layout_gravity="left|top"
-        grid:layout_column="0">
+        grid:layout_column="0"
+        android:onClick="startQuiz">
 
         <LinearLayout
             android:layout_width="fill_parent"
