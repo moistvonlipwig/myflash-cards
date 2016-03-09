@@ -2,69 +2,113 @@ package org.teliinc.myflash_cards.Activties;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Toast;
 
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 import com.lorentzos.flingswipe.SwipeFlingAdapterView;
 
-import org.parceler.Parcels;
+import org.teliinc.myflash_cards.Model.FlashCard;
 import org.teliinc.myflash_cards.Model.Quiz;
 import org.teliinc.myflash_cards.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
-public class QuizMe extends AppCompatActivity {
-
-    private ArrayList<String> al;
-    private ArrayAdapter<String> arrayAdapter;
-    private int i;
-
-    private Quiz quiz;
+public class QuizMe extends BaseMenuClass {
 
     @Bind(R.id.frame)
     SwipeFlingAdapterView flingContainer;
+    @Bind(R.id.quiz_me_name)
+    AutoCompleteTextView quiz_name;
+    private List<Quiz> quizzes;
+    private ArrayList<String> cards;
+    private ArrayAdapter<String> arrayAdapter;
+    private int i;
+
+    private ArrayList<String> al;
+
+    static void makeToast(Context ctx, String s) {
+        Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
+    }
+
     /*
     CardStack mCardStack;
     CardsDataAdapter mCardAdapter;
     MyCardListener cardListener;
 */
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_quiz_me);
         ButterKnife.bind(this);
 
-        // Initialize activity from quiz passed from intent
-        quiz = (Quiz) Parcels.unwrap(getIntent().getParcelableExtra("quiz"));
+        // Get Quizzes for database and initialize spinner
+        // Initialize Firebases variables
+        Firebase.setAndroidContext(this);
 
-        // TODO : Get quiz data
-        al = new ArrayList<>();
-        al.add("php");
-        al.add("c");
-        al.add("python");
-        al.add("java");
-        al.add("html");
-        al.add("c++");
-        al.add("css");
-        al.add("javascript");
+        // Initialize quiz arrays
+        quizzes = new ArrayList<>();
+        cards = new ArrayList<>();
 
-        arrayAdapter = new ArrayAdapter<>(this, R.layout.quiz_item, R.id.helloText, al );
+        // Iterate through the mQuizRef list
+        LaunchScreenActivity.firebaseRef.child("Quizzes").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot child : dataSnapshot.getChildren()) {
+                    Quiz stored_quiz = (Quiz) child.getValue(Quiz.class);
+                    quizzes.add(stored_quiz);
+                }
+                setquizData();
+            }
 
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+            }
+        });
 
+        // Optionally add an OnItemClickListener
+        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClicked(int itemPosition, Object dataObject) {
+                makeToast(QuizMe.this, (String)dataObject);
+            }
+        });
+    }
+
+    public void setquizData() {
+        ArrayList<String> quiz_titles = new ArrayList<>();
+        for (Quiz q : quizzes) {
+            quiz_titles.add(q.getTitle());
+        }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_dropdown_item_1line, quiz_titles);
+        quiz_name.setAdapter(adapter);
+
+        Quiz quiz_selected = (Quiz) quizzes.get(0);
+        List<FlashCard> flashCards = quiz_selected.getFlashCards();
+
+        for (FlashCard card : flashCards) {
+            cards.add(card.getQuestion());
+        }
+        arrayAdapter = new ArrayAdapter<>(this, R.layout.quiz_item, R.id.quiz_question, cards );
         flingContainer.setAdapter(arrayAdapter);
+
         flingContainer.setFlingListener(new SwipeFlingAdapterView.onFlingListener() {
             @Override
             public void removeFirstObjectInAdapter() {
                 // this is the simplest way to delete an object from the Adapter (/AdapterView)
-                Timber.d("LIST", "removed object!");
-                al.remove(0);
+                cards.remove(0);
                 arrayAdapter.notifyDataSetChanged();
             }
 
@@ -73,21 +117,20 @@ public class QuizMe extends AppCompatActivity {
                 //Do something on the left!
                 //You also have access to the original object.
                 //If you want to use it just cast it (String) dataObject
-                makeToast(QuizMe.this, "Left!");
-                al.add((String)dataObject);
+                makeToast(QuizMe.this, "Ok, we try that again!");
+                cards.add((String) dataObject);
             }
 
             @Override
             public void onRightCardExit(Object dataObject) {
-                makeToast(QuizMe.this, "Right!");
+                makeToast(QuizMe.this, "Cool you know that!");
             }
 
             @Override
             public void onAdapterAboutToEmpty(int itemsInAdapter) {
                 // Ask for more data here
-                al.add("XML ".concat(String.valueOf(i)));
+                cards.add("New Question ".concat(String.valueOf(i)));
                 arrayAdapter.notifyDataSetChanged();
-                Timber.d("LIST", "notified");
                 i++;
             }
 
@@ -98,39 +141,7 @@ public class QuizMe extends AppCompatActivity {
                 view.findViewById(R.id.item_swipe_left_indicator).setAlpha(scrollProgressPercent > 0 ? scrollProgressPercent : 0);
             }
         });
-
-
-        // Optionally add an OnItemClickListener
-        flingContainer.setOnItemClickListener(new SwipeFlingAdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClicked(int itemPosition, Object dataObject) {
-                makeToast(QuizMe.this, "Clicked!");
-            }
-        });
-
-/*
-        mCardStack = (CardStack) findViewById(R.id.container);
-        mCardStack.setContentResource(R.layout.flashcard_list);
-        mCardStack.setStackMargin(20);
-
-        mCardAdapter = new CardsDataAdapter(getApplicationContext());
-        mCardAdapter.add("test1");
-        mCardAdapter.add("test2");
-        mCardAdapter.add("test3");
-        mCardAdapter.add("test4");
-        mCardAdapter.add("test5");
-
-        mCardStack.setAdapter(mCardAdapter);
-
-        cardListener = new MyCardListener();
-        mCardStack.setListener(cardListener);
-*/
     }
-
-    static void makeToast(Context ctx, String s){
-        Toast.makeText(ctx, s, Toast.LENGTH_SHORT).show();
-    }
-
 
     @OnClick(R.id.right)
     public void right() {
@@ -144,61 +155,4 @@ public class QuizMe extends AppCompatActivity {
     public void left() {
         flingContainer.getTopCardListener().selectLeft();
     }
-    /*
-    public class CardsDataAdapter extends ArrayAdapter<String> {
-
-        public CardsDataAdapter(Context context) {
-            super(context, R.layout.flashcard_list);
-        }
-
-        @Override
-        public View getView(int position, final View contentView, ViewGroup parent) {
-            //supply the layout for your card
-            TextView v = (TextView) (contentView.findViewById(R.id.tv_name));
-            v.setText(getItem(position));
-            return contentView;
-        }
-    }
-
-    public class MyCardListener implements CardStack.CardEventListener {
-        //implement card event interface
-        @Override
-        public boolean swipeEnd(int direction, float distance) {
-            //if "return true" the dismiss animation will be triggered
-            //if false, the card will move back to stack
-            //distance is finger swipe distance in dp
-
-            //the direction indicate swipe direction
-            //there are four directions
-            //  0  |  1
-            // ----------
-            //  2  |  3
-
-            return false;
-        }
-
-        @Override
-        public boolean swipeStart(int direction, float distance) {
-
-            return true;
-        }
-
-        @Override
-        public boolean swipeContinue(int direction, float distanceX, float distanceY) {
-
-            return true;
-        }
-
-        @Override
-        public void discarded(int id, int direction) {
-            //this callback invoked when dismiss animation is finished.
-            return;
-        }
-
-        @Override
-        public void topCardTapped() {
-            //this callback invoked when a top card is tapped by user.
-        }
-    }
-    */
 }

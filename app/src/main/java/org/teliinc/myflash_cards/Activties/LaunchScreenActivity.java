@@ -47,7 +47,7 @@ public class LaunchScreenActivity extends FirebaseLoginBaseActivity {
         Firebase.setAndroidContext(this);
 
         // Get Flashcard Ref
-        firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/FlashCards");
+        firebaseRef = new Firebase("https://teliflashcards.firebaseio.com/");
 
         // Initialized the ProgressDialog and Start download
         progress = new ProgressDialog(this);
